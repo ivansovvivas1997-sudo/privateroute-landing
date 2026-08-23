@@ -304,4 +304,97 @@ nav {
     .creadores, .como-funciona, .precios {
         padding: 60px 20px;
     }
+}.contenedor-registro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    padding: 40px 20px;
+}
+
+.tarjeta-registro {
+    background-color: #161620;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.tarjeta-registro h1 {
+    color: #F2F0EA;
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.subtitulo-registro {
+    color: #8A8A94;
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 14px;
+}
+
+.tarjeta-registro form {
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-registro label {
+    color: #F2F0EA;
+    font-size: 14px;
+    margin-bottom: 6px;
+    margin-top: 16px;
+}
+
+.tarjeta-registro input,
+.tarjeta-registro select {
+    background-color: #0B0B0F;
+    border: 1px solid #2A2A35;
+    border-radius: 8px;
+    padding: 12px;
+    color: #F2F0EA;
+    font-size: 14px;
+}
+
+.tarjeta-registro input:focus,
+.tarjeta-registro select:focus {
+    outline: none;
+    border-color: #C9A24B;
+}
+
+.checkbox-edad {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.checkbox-edad label {
+    margin: 0;
+    font-size: 13px;
+    color: #8A8A94;
+}
+
+.btn-crear-cuenta {
+    background: linear-gradient(135deg, #C9A24B, #E8C874);
+    color: #0B0B0F;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 24px;
+}
+
+.link-login {
+    text-align: center;
+    color: #8A8A94;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.link-login a {
+    color: #C9A24B;
+    text-decoration: none;
 }
