@@ -1,0 +1,289 @@
+body {
+    background-color: #0B0B0F;
+    color: #F2F0EA;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid #161620;
+}
+
+.logo {
+    color: #C9A24B;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.btn-registro {
+    background-color: #C9A24B;
+    color: #0B0B0F;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.hero {
+    text-align: center;
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.hero h1 {
+    color: #C9A24B;
+    font-size: 42px;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    color: #8A8A94;
+    font-size: 18px;
+    margin-bottom: 32px;
+}
+
+.btn-explorar {
+    background: linear-gradient(135deg, #C9A24B, #E8C874);
+    color: #0B0B0F;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(201, 162, 75, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-explorar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(201, 162, 75, 0.6);
+}
+
+.creadores {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.creadores h2 {
+    color: #F2F0EA;
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.grid-creadores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.tarjeta-creador {
+    background-color: #161620;
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+}
+
+.portada {
+    height: 100px;
+    background: linear-gradient(135deg, #C9A24B33, #16162000);
+}
+
+.info-creador {
+    padding: 20px;
+    position: relative;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #C9A24B;
+    border: 3px solid #161620;
+    margin-top: -50px;
+    margin-bottom: 12px;
+}
+
+.info-creador h3 {
+    color: #F2F0EA;
+    margin: 0 0 4px 0;
+}
+
+.categoria {
+    color: #8A8A94;
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
+
+.rating {
+    color: #C9A24B;
+    font-size: 14px;
+    margin: 0 0 8px 0;
+}
+
+.precio {
+    color: #F2F0EA;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+}
+
+.btn-suscribir {
+    width: 100%;
+    background-color: #C9A24B;
+    color: #0B0B0F;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.como-funciona {
+    padding: 80px 40px;
+    text-align: center;
+    background-color: #0F0F14;
+}
+
+.como-funciona h2 {
+    color: #F2F0EA;
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.grid-pasos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.paso {
+    padding: 20px;
+}
+
+.numero {
+    width: 48px;
+    height: 48px;
+    background-color: #C9A24B;
+    color: #0B0B0F;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 auto 16px auto;
+}
+
+.paso h3 {
+    color: #F2F0EA;
+    margin-bottom: 8px;
+}
+
+.paso p {
+    color: #8A8A94;
+    font-size: 15px;
+    margin: 0;
+}
+
+.precios {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.precios h2 {
+    color: #F2F0EA;
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.subtitulo-precios {
+    color: #8A8A94;
+    margin-bottom: 40px;
+}
+
+.grid-precios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.tarjeta-precio {
+    background-color: #161620;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: left;
+    position: relative;
+}
+
+.tarjeta-precio.destacada {
+    border: 2px solid #C9A24B;
+}
+
+.etiqueta-popular {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #C9A24B;
+    color: #0B0B0F;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.tarjeta-precio h3 {
+    color: #F2F0EA;
+    font-size: 20px;
+    margin: 0 0 12px 0;
+}
+
+.precio-monto {
+    color: #C9A24B;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+}
+
+.precio-monto span {
+    color: #8A8A94;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.tarjeta-precio ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tarjeta-precio li {
+    color: #8A8A94;
+    font-size: 14px;
+    padding: 8px 0;
+    border-top: 1px solid #0B0B0F;
+}
+
+.footer {
+    background-color: #161620;
+    padding: 40px;
+    text-align: center;
+}
+
+.footer p {
+    color: #8A8A94;
+    font-size: 14px;
+    margin: 0;
+}
