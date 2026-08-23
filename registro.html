@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - PrivateRoute</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">PrivateRoute</a>
+    </nav>
+
+    <div class="contenedor-registro">
+        <div class="tarjeta-registro">
+            <h1>Crear cuenta</h1>
+            <p class="subtitulo-registro">Únete a PrivateRoute en segundos.</p>
+
+            <form>
+                <label for="nombre">Nombre de usuario</label>
+                <input type="text" id="nombre" placeholder="Tu nombre de usuario">
+
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" placeholder="tucorreo@ejemplo.com">
+
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" placeholder="Mínimo 8 caracteres">
+
+                <label for="tipo">Quiero registrarme como:</label>
+                <select id="tipo">
+                    <option value="fan">Fan</option>
+                    <option value="creador">Creador</option>
+                </select>
+
+                <div class="checkbox-edad">
+                    <input type="checkbox" id="edad">
+                    <label for="edad">Confirmo que soy mayor de 18 años</label>
+                </div>
+
+                <button type="submit" class="btn-crear-cuenta">Crear cuenta</button>
+            </form>
+
+            <p class="link-login">¿Ya tienes cuenta? <a href="#">Inicia sesión</a></p>
+        </div>
+    </div>
+</body>
+</html>
