@@ -286,4 +286,22 @@ nav {
     color: #8A8A94;
     font-size: 14px;
     margin: 0;
+}@media (max-width: 768px) {
+    .grid-creadores,
+    .grid-pasos,
+    .grid-precios {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    nav {
+        padding: 16px 20px;
+    }
+
+    .creadores, .como-funciona, .precios {
+        padding: 60px 20px;
+    }
 }
