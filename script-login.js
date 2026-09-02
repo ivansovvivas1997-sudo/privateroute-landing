@@ -6,7 +6,7 @@ document.getElementById('formulario-login').addEventListener('submit', function(
         contrasena: document.getElementById('contrasena').value
     };
 
-    fetch('http://localhost:3000/login', {
+    fetch('https://privateroute-backend.onrender.com/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

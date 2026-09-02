@@ -9,7 +9,7 @@ document.getElementById('formulario-registro').addEventListener('submit', functi
         mayorDeEdad: document.getElementById('edad').checked
     };
 
-    fetch('http://localhost:3000/registro', {
+    fetch('https://privateroute-backend.onrender.com/registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
