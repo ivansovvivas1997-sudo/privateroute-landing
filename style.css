@@ -502,6 +502,23 @@ nav {
 
     nav {
         padding: 16px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .btn-login {
+        font-size: 13px;
+        padding: 7px 14px;
+        margin-right: 0;
+    }
+
+    .btn-registro {
+        font-size: 13px;
+        padding: 7px 16px;
     }
 
     .creadores, .como-funciona, .precios {
