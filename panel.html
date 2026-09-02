@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel - PrivateRoute</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">PrivateRoute</a>
+        <button id="btn-cerrar-sesion" class="btn-registro">Cerrar sesión</button>
+    </nav>
+
+    <div class="hero">
+        <h1 id="saludo-usuario">Cargando...</h1>
+        <p id="subtitulo-panel">Bienvenido a tu panel personal.</p>
+    </div>
+
+    <!-- Vista para usuarios tipo Fan -->
+    <section id="panel-fan" class="panel-contenido" style="display: none;">
+        <h2>Tu contenido</h2>
+        <div class="grid-panel">
+            <div class="tarjeta-panel">
+                <h3>Explorar creadores</h3>
+                <p>Descubrí nuevos creadores por categoría y encontrá contenido que te interese.</p>
+            </div>
+            <div class="tarjeta-panel">
+                <h3>Mis suscripciones</h3>
+                <p>Todavía no tenés suscripciones activas. Cuando te suscribas a un creador, va a aparecer acá.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vista para usuarios tipo Creador -->
+    <section id="panel-creador" class="panel-contenido" style="display: none;">
+        <h2>Panel de creador</h2>
+        <div class="grid-panel">
+            <div class="tarjeta-panel">
+                <h3>Subir contenido</h3>
+                <p>Próximamente vas a poder subir fotos y videos exclusivos para tus suscriptores desde acá.</p>
+            </div>
+            <div class="tarjeta-panel">
+                <h3>Mis suscriptores</h3>
+                <p>Todavía no tenés suscriptores. Cuando alguien se suscriba a tu perfil, va a aparecer acá.</p>
+            </div>
+            <div class="tarjeta-panel">
+                <h3>Ganancias</h3>
+                <p>El seguimiento de tus ingresos por suscripción va a estar disponible en esta sección.</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="script-panel.js"></script>
+</body>
+</html>
