@@ -464,6 +464,10 @@ nav {
     flex-direction: column;
 }
 
+#campos-creador label[for="descripcion"] {
+    margin-top: 28px;
+}
+
 .checkbox-edad {
     display: flex;
     align-items: center;
