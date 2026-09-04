@@ -456,6 +456,14 @@ nav {
     border-color: #C9A24B;
 }
 
+#campos-creador {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #2A2A35;
+    display: flex;
+    flex-direction: column;
+}
+
 .checkbox-edad {
     display: flex;
     align-items: center;
