@@ -3,7 +3,7 @@ const camposCreador = document.getElementById('campos-creador');
 
 selectTipo.addEventListener('change', function() {
     if (selectTipo.value === 'creador') {
-        camposCreador.style.display = 'block';
+        camposCreador.style.display = 'flex';
     } else {
         camposCreador.style.display = 'none';
     }
