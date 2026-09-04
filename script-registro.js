@@ -1,3 +1,14 @@
+const selectTipo = document.getElementById('tipo');
+const camposCreador = document.getElementById('campos-creador');
+
+selectTipo.addEventListener('change', function() {
+    if (selectTipo.value === 'creador') {
+        camposCreador.style.display = 'block';
+    } else {
+        camposCreador.style.display = 'none';
+    }
+});
+
 document.getElementById('formulario-registro').addEventListener('submit', function(evento) {
     evento.preventDefault();
 
@@ -6,7 +17,9 @@ document.getElementById('formulario-registro').addEventListener('submit', functi
         correo: document.getElementById('correo').value,
         contrasena: document.getElementById('contrasena').value,
         tipo: document.getElementById('tipo').value,
-        mayorDeEdad: document.getElementById('edad').checked
+        mayorDeEdad: document.getElementById('edad').checked,
+        categoria: document.getElementById('categoria').value,
+        descripcion: document.getElementById('descripcion').value
     };
 
     fetch('https://privateroute-backend.onrender.com/registro', {

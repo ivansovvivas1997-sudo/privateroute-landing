@@ -437,17 +437,21 @@ nav {
 }
 
 .tarjeta-registro input,
-.tarjeta-registro select {
+.tarjeta-registro select,
+.tarjeta-registro textarea {
     background-color: #0B0B0F;
     border: 1px solid #2A2A35;
     border-radius: 8px;
     padding: 12px;
     color: #F2F0EA;
     font-size: 14px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
 }
 
 .tarjeta-registro input:focus,
-.tarjeta-registro select:focus {
+.tarjeta-registro select:focus,
+.tarjeta-registro textarea:focus {
     outline: none;
     border-color: #C9A24B;
 }

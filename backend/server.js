@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 app.post('/registro', async (req, res) => {
     try {
-        const { nombre, correo, contrasena, tipo, mayorDeEdad } = req.body;
+        const { nombre, correo, contrasena, tipo, mayorDeEdad, categoria, descripcion } = req.body;
 
         // Validación: campos obligatorios
         if (!nombre || !correo || !contrasena) {
@@ -67,6 +67,8 @@ app.post('/registro', async (req, res) => {
             correo,
             contrasena: contrasenaEncriptada,
             tipo,
+            categoria: tipo === 'creador' ? (categoria || 'Otro') : null,
+            descripcion: tipo === 'creador' ? (descripcion || '') : null,
             fechaRegistro: new Date()
         };
 
