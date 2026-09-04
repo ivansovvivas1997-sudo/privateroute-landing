@@ -127,6 +127,12 @@ nav {
     border: 3px solid #161620;
     margin-top: -50px;
     margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B0B0F;
+    font-weight: bold;
+    font-size: 22px;
 }
 
 .info-creador h3 {
@@ -150,6 +156,19 @@ nav {
     color: #F2F0EA;
     font-weight: bold;
     margin: 0 0 16px 0;
+}
+
+.bio-creador {
+    color: #8A8A94;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.cargando-creadores {
+    color: #8A8A94;
+    grid-column: 1 / -1;
+    text-align: center;
 }
 
 .btn-suscribir {

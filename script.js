@@ -26,3 +26,42 @@ if (nombreUsuario) {
         window.location.reload();
     });
 }
+
+// Cargamos los creadores reales desde el backend y armamos las tarjetas
+// dinámicamente, en vez de mostrar los tres datos inventados de antes.
+const gridCreadores = document.getElementById('grid-creadores');
+
+if (gridCreadores) {
+    fetch('https://privateroute-backend.onrender.com/creadores')
+        .then(respuesta => respuesta.json())
+        .then(creadores => {
+            if (creadores.length === 0) {
+                gridCreadores.innerHTML = '<p class="cargando-creadores">Todavía no hay creadores registrados. ¡Sé el primero!</p>';
+                return;
+            }
+
+            gridCreadores.innerHTML = '';
+
+            creadores.forEach(creador => {
+                const inicial = creador.nombre ? creador.nombre.charAt(0).toUpperCase() : '?';
+                const descripcion = creador.descripcion || 'Este creador todavía no agregó una descripción.';
+
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta-creador';
+                tarjeta.innerHTML = `
+                    <div class="portada"></div>
+                    <div class="info-creador">
+                        <div class="avatar">${inicial}</div>
+                        <h3>${creador.nombre}</h3>
+                        <p class="categoria">${creador.categoria || 'Sin categoría'}</p>
+                        <p class="bio-creador">${descripcion}</p>
+                    </div>
+                `;
+                gridCreadores.appendChild(tarjeta);
+            });
+        })
+        .catch(error => {
+            gridCreadores.innerHTML = '<p class="cargando-creadores">No se pudieron cargar los creadores. Intenta de nuevo más tarde.</p>';
+            console.error(error);
+        });
+}

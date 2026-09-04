@@ -81,6 +81,22 @@ app.post('/registro', async (req, res) => {
     }
 });
 
+// Devuelve la lista de creadores registrados, sin datos sensibles como la contraseña,
+// para que la landing pueda mostrar creadores reales en vez de datos inventados.
+app.get('/creadores', async (req, res) => {
+    try {
+        const creadores = await db.collection('usuarios')
+            .find({ tipo: 'creador' })
+            .project({ contrasena: 0 })
+            .toArray();
+
+        res.json(creadores);
+    } catch (error) {
+        console.error('Error al obtener creadores:', error);
+        res.status(500).send('Error al obtener los creadores.');
+    }
+});
+
 app.post('/login', async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
