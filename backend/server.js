@@ -6,7 +6,7 @@ dns.setDefaultResultOrder('ipv4first'); // evita el error SSL que da Windows al 
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const app = express();
 const PORT = 3000;
@@ -94,6 +94,25 @@ app.get('/creadores', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener creadores:', error);
         res.status(500).send('Error al obtener los creadores.');
+    }
+});
+
+// Devuelve los datos de un solo creador, para mostrar su perfil público.
+app.get('/creadores/:id', async (req, res) => {
+    try {
+        const creador = await db.collection('usuarios').findOne(
+            { _id: new ObjectId(req.params.id), tipo: 'creador' },
+            { projection: { contrasena: 0 } }
+        );
+
+        if (!creador) {
+            return res.status(404).send('Creador no encontrado.');
+        }
+
+        res.json(creador);
+    } catch (error) {
+        console.error('Error al obtener creador:', error);
+        res.status(500).send('Error al obtener el creador.');
     }
 });
 

@@ -48,6 +48,7 @@ if (gridCreadores) {
 
                 const tarjeta = document.createElement('div');
                 tarjeta.className = 'tarjeta-creador';
+                tarjeta.style.cursor = 'pointer';
                 tarjeta.innerHTML = `
                     <div class="portada"></div>
                     <div class="info-creador">
@@ -57,6 +58,9 @@ if (gridCreadores) {
                         <p class="bio-creador">${descripcion}</p>
                     </div>
                 `;
+                tarjeta.addEventListener('click', function() {
+                    window.location.href = `perfil.html?id=${creador._id}`;
+                });
                 gridCreadores.appendChild(tarjeta);
             });
         })
