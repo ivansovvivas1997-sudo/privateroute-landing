@@ -469,6 +469,52 @@ nav {
     font-size: 13px;
 }
 
+.tarjeta-editar-perfil {
+    background-color: #161620;
+    border: 1px solid #2A2A35;
+    border-radius: 12px;
+    padding: 28px 24px;
+    max-width: 500px;
+    margin: 32px auto 0 auto;
+    text-align: left;
+}
+
+.tarjeta-editar-perfil h3 {
+    color: #C9A24B;
+    font-size: 18px;
+    margin: 0 0 16px 0;
+}
+
+.tarjeta-editar-perfil form {
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-editar-perfil label {
+    color: #F2F0EA;
+    font-size: 14px;
+    margin-bottom: 6px;
+    margin-top: 16px;
+}
+
+.tarjeta-editar-perfil select,
+.tarjeta-editar-perfil textarea {
+    background-color: #0B0B0F;
+    border: 1px solid #2A2A35;
+    border-radius: 8px;
+    padding: 12px;
+    color: #F2F0EA;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+.tarjeta-editar-perfil select:focus,
+.tarjeta-editar-perfil textarea:focus {
+    outline: none;
+    border-color: #C9A24B;
+}
+
 .contenedor-registro {
     display: flex;
     justify-content: center;

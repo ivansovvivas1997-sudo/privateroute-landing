@@ -19,6 +19,7 @@ if (nombreUsuario) {
         evento.preventDefault();
         localStorage.removeItem('nombreUsuario');
         localStorage.removeItem('tipoUsuario');
+        localStorage.removeItem('correoUsuario');
         window.location.reload();
     });
 }

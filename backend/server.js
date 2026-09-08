@@ -116,6 +116,51 @@ app.get('/creadores/:id', async (req, res) => {
     }
 });
 
+// Devuelve el perfil de un creador buscándolo por su correo,
+// para que el panel pueda mostrar sus datos actuales al editar.
+app.get('/perfil/:correo', async (req, res) => {
+    try {
+        const creador = await db.collection('usuarios').findOne(
+            { correo: req.params.correo, tipo: 'creador' },
+            { projection: { contrasena: 0 } }
+        );
+
+        if (!creador) {
+            return res.status(404).send('Creador no encontrado.');
+        }
+
+        res.json(creador);
+    } catch (error) {
+        console.error('Error al obtener perfil:', error);
+        res.status(500).send('Error al obtener el perfil.');
+    }
+});
+
+// Actualiza la categoría y descripción de un creador.
+app.put('/perfil', async (req, res) => {
+    try {
+        const { correo, categoria, descripcion } = req.body;
+
+        if (!correo) {
+            return res.status(400).send('Falta el correo del usuario.');
+        }
+
+        const resultado = await db.collection('usuarios').updateOne(
+            { correo, tipo: 'creador' },
+            { $set: { categoria, descripcion } }
+        );
+
+        if (resultado.matchedCount === 0) {
+            return res.status(404).send('No se encontró el creador.');
+        }
+
+        res.send('Perfil actualizado correctamente.');
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error);
+        res.status(500).send('Error al actualizar el perfil.');
+    }
+});
+
 app.post('/login', async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
@@ -132,11 +177,13 @@ app.post('/login', async (req, res) => {
             return res.status(401).send('Correo o contraseña incorrectos.');
         }
 
-        // Ahora devolvemos un JSON con nombre y tipo, en vez de solo texto,
-        // para que el panel sepa si mostrar la vista de Fan o de Creador.
+        // Ahora devolvemos un JSON con nombre, tipo y correo, en vez de solo texto,
+        // para que el panel sepa si mostrar la vista de Fan o de Creador,
+        // y para que el creador pueda editar su perfil más adelante.
         res.json({
             nombre: usuario.nombre,
-            tipo: usuario.tipo
+            tipo: usuario.tipo,
+            correo: usuario.correo
         });
     } catch (error) {
         console.error('Error en login:', error);

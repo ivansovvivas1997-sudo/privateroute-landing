@@ -23,6 +23,7 @@ document.getElementById('formulario-login').addEventListener('submit', function(
     .then(datosUsuario => {
         localStorage.setItem('nombreUsuario', datosUsuario.nombre);
         localStorage.setItem('tipoUsuario', datosUsuario.tipo);
+        localStorage.setItem('correoUsuario', datosUsuario.correo);
         window.location.href = 'panel.html';
     })
     .catch(error => {
