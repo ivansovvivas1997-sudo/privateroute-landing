@@ -53,6 +53,23 @@ if (!idCreador) {
             document.getElementById('btn-suscribir-perfil').addEventListener('click', function() {
                 alert('Las suscripciones todavía no están disponibles. ¡Pronto vamos a habilitar los pagos!');
             });
+
+            // Cargamos las fotos que este creador ya subió
+            fetch(`https://privateroute-backend.onrender.com/contenido/${encodeURIComponent(creador.correo)}`)
+                .then(respuesta => respuesta.json())
+                .then(lista => {
+                    const galeria = document.getElementById('galeria-perfil');
+                    if (lista.length === 0) {
+                        return;
+                    }
+                    lista.forEach(item => {
+                        const img = document.createElement('img');
+                        img.src = item.url;
+                        img.className = 'miniatura-contenido';
+                        galeria.appendChild(img);
+                    });
+                })
+                .catch(error => console.error('No se pudo cargar la galería:', error));
         })
         .catch(error => {
             contenedorPerfil.innerHTML = '<p class="cargando-creadores">No se pudo cargar este perfil. Puede que el creador ya no exista.</p>';

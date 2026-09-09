@@ -7,6 +7,32 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const { MongoClient, ObjectId } = require('mongodb');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } // máximo 5MB por foto
+});
+
+function subirACloudinary(buffer) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: 'privateroute' },
+            (error, resultado) => {
+                if (error) reject(error);
+                else resolve(resultado);
+            }
+        );
+        stream.end(buffer);
+    });
+}
 
 const app = express();
 const PORT = 3000;
@@ -39,22 +65,18 @@ app.post('/registro', async (req, res) => {
     try {
         const { nombre, correo, contrasena, tipo, mayorDeEdad, categoria, descripcion } = req.body;
 
-        // Validación: campos obligatorios
         if (!nombre || !correo || !contrasena) {
             return res.status(400).send('Faltan datos obligatorios (nombre, correo o contraseña).');
         }
 
-        // Validación: contraseña mínima
         if (contrasena.length < 8) {
             return res.status(400).send('La contraseña debe tener al menos 8 caracteres.');
         }
 
-        // Validación: confirmación de mayoría de edad
         if (!mayorDeEdad) {
             return res.status(400).send('Debes confirmar que eres mayor de 18 años para registrarte.');
         }
 
-        // Validación: correo no repetido
         const usuarioExistente = await db.collection('usuarios').findOne({ correo });
         if (usuarioExistente) {
             return res.status(409).send('Ya existe una cuenta registrada con ese correo.');
@@ -81,8 +103,6 @@ app.post('/registro', async (req, res) => {
     }
 });
 
-// Devuelve la lista de creadores registrados, sin datos sensibles como la contraseña,
-// para que la landing pueda mostrar creadores reales en vez de datos inventados.
 app.get('/creadores', async (req, res) => {
     try {
         const creadores = await db.collection('usuarios')
@@ -97,7 +117,6 @@ app.get('/creadores', async (req, res) => {
     }
 });
 
-// Devuelve los datos de un solo creador, para mostrar su perfil público.
 app.get('/creadores/:id', async (req, res) => {
     try {
         const creador = await db.collection('usuarios').findOne(
@@ -116,8 +135,6 @@ app.get('/creadores/:id', async (req, res) => {
     }
 });
 
-// Devuelve el perfil de un creador buscándolo por su correo,
-// para que el panel pueda mostrar sus datos actuales al editar.
 app.get('/perfil/:correo', async (req, res) => {
     try {
         const creador = await db.collection('usuarios').findOne(
@@ -136,7 +153,6 @@ app.get('/perfil/:correo', async (req, res) => {
     }
 });
 
-// Actualiza la categoría y descripción de un creador.
 app.put('/perfil', async (req, res) => {
     try {
         const { correo, categoria, descripcion } = req.body;
@@ -161,6 +177,52 @@ app.put('/perfil', async (req, res) => {
     }
 });
 
+app.post('/contenido', upload.single('imagen'), async (req, res) => {
+    try {
+        const { correo } = req.body;
+
+        if (!correo) {
+            return res.status(400).send('Falta el correo del creador.');
+        }
+        if (!req.file) {
+            return res.status(400).send('No se recibió ninguna imagen.');
+        }
+
+        const creador = await db.collection('usuarios').findOne({ correo, tipo: 'creador' });
+        if (!creador) {
+            return res.status(404).send('Creador no encontrado.');
+        }
+
+        const resultado = await subirACloudinary(req.file.buffer);
+
+        const nuevoContenido = {
+            correoCreador: correo,
+            url: resultado.secure_url,
+            fecha: new Date()
+        };
+
+        await db.collection('contenido').insertOne(nuevoContenido);
+        res.send('¡Contenido subido correctamente!');
+    } catch (error) {
+        console.error('Error al subir contenido:', error);
+        res.status(500).send('Error al subir el contenido.');
+    }
+});
+
+app.get('/contenido/:correo', async (req, res) => {
+    try {
+        const contenido = await db.collection('contenido')
+            .find({ correoCreador: req.params.correo })
+            .sort({ fecha: -1 })
+            .toArray();
+
+        res.json(contenido);
+    } catch (error) {
+        console.error('Error al obtener contenido:', error);
+        res.status(500).send('Error al obtener el contenido.');
+    }
+});
+
 app.post('/login', async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
@@ -177,9 +239,6 @@ app.post('/login', async (req, res) => {
             return res.status(401).send('Correo o contraseña incorrectos.');
         }
 
-        // Ahora devolvemos un JSON con nombre, tipo y correo, en vez de solo texto,
-        // para que el panel sepa si mostrar la vista de Fan o de Creador,
-        // y para que el creador pueda editar su perfil más adelante.
         res.json({
             nombre: usuario.nombre,
             tipo: usuario.tipo,

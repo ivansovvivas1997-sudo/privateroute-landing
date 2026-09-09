@@ -515,6 +515,30 @@ nav {
     border-color: #C9A24B;
 }
 
+.grid-contenido-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.galeria-perfil {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 24px 60px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.miniatura-contenido {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #2A2A35;
+}
+
 .contenedor-registro {
     display: flex;
     justify-content: center;

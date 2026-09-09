@@ -20,6 +20,60 @@ if (!nombreUsuario) {
             })
             .catch(error => console.error('No se pudo cargar el perfil actual:', error));
 
+        // Cargamos y mostramos el contenido que el creador ya subió
+        function cargarContenidoPanel() {
+            fetch(`https://privateroute-backend.onrender.com/contenido/${encodeURIComponent(correoUsuario)}`)
+                .then(respuesta => respuesta.json())
+                .then(lista => {
+                    const grid = document.getElementById('grid-contenido-panel');
+                    grid.innerHTML = '';
+                    lista.forEach(item => {
+                        const img = document.createElement('img');
+                        img.src = item.url;
+                        img.className = 'miniatura-contenido';
+                        grid.appendChild(img);
+                    });
+                })
+                .catch(error => console.error('No se pudo cargar el contenido:', error));
+        }
+
+        cargarContenidoPanel();
+
+        document.getElementById('formulario-subir-contenido').addEventListener('submit', function(evento) {
+            evento.preventDefault();
+
+            const archivo = document.getElementById('imagen-contenido').files[0];
+            if (!archivo) {
+                alert('Elegí una foto primero.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('imagen', archivo);
+            formData.append('correo', correoUsuario);
+
+            fetch('https://privateroute-backend.onrender.com/contenido', {
+                method: 'POST',
+                body: formData
+            })
+            .then(async respuesta => {
+                const mensaje = await respuesta.text();
+                if (!respuesta.ok) {
+                    throw new Error(mensaje);
+                }
+                return mensaje;
+            })
+            .then(mensaje => {
+                alert(mensaje);
+                document.getElementById('formulario-subir-contenido').reset();
+                cargarContenidoPanel();
+            })
+            .catch(error => {
+                alert(error.message || 'Error al subir la foto.');
+                console.error(error);
+            });
+        });
+
         document.getElementById('formulario-editar-perfil').addEventListener('submit', function(evento) {
             evento.preventDefault();
 

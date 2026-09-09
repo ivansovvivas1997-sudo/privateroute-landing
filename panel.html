@@ -37,10 +37,6 @@
         <h2>Panel de creador</h2>
         <div class="grid-panel">
             <div class="tarjeta-panel">
-                <h3>Subir contenido</h3>
-                <p>Próximamente vas a poder subir fotos y videos exclusivos para tus suscriptores desde acá.</p>
-            </div>
-            <div class="tarjeta-panel">
                 <h3>Mis suscriptores</h3>
                 <p>Todavía no tenés suscriptores. Cuando alguien se suscriba a tu perfil, va a aparecer acá.</p>
             </div>
@@ -48,6 +44,16 @@
                 <h3>Ganancias</h3>
                 <p>El seguimiento de tus ingresos por suscripción va a estar disponible en esta sección.</p>
             </div>
+        </div>
+
+        <div class="tarjeta-editar-perfil">
+            <h3>Subir contenido</h3>
+            <form id="formulario-subir-contenido">
+                <label for="imagen-contenido">Elegí una foto</label>
+                <input type="file" id="imagen-contenido" accept="image/*">
+                <button type="submit" class="btn-crear-cuenta">Subir foto</button>
+            </form>
+            <div class="grid-contenido-panel" id="grid-contenido-panel"></div>
         </div>
 
         <div class="tarjeta-editar-perfil">
