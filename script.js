@@ -1,3 +1,9 @@
+// Si abres la página con Live Server (en tu computadora), habla con tu backend local.
+// Si la abres desde GitHub Pages, habla con el backend de Render.
+const API = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+    ? 'http://localhost:3000'
+    : 'https://privateroute-backend.onrender.com';
+
 const botonExplorar = document.querySelector('.btn-explorar');
 
 botonExplorar.addEventListener('click', function() {
@@ -5,12 +11,11 @@ botonExplorar.addEventListener('click', function() {
 });
 
 // Si ya hay una sesión activa, cambiamos los botones del nav
-// para reflejar eso, en vez de mostrar "Iniciar sesión"/"Registrarse"
-// como si nadie hubiera entrado (esto es lo que causaba que pareciera
-// que la sesión se cerraba al usar el botón "atrás" del navegador).
+// para mostrar "Mi panel" y "Cerrar sesión".
 const nombreUsuario = localStorage.getItem('nombreUsuario');
+const tokenUsuario = localStorage.getItem('tokenUsuario');
 
-if (nombreUsuario) {
+if (nombreUsuario && tokenUsuario) {
     const navLogin = document.getElementById('nav-login');
     const navRegistro = document.getElementById('nav-registro');
 
@@ -21,6 +26,7 @@ if (nombreUsuario) {
     navRegistro.href = '#';
     navRegistro.addEventListener('click', function(evento) {
         evento.preventDefault();
+        localStorage.removeItem('tokenUsuario');
         localStorage.removeItem('nombreUsuario');
         localStorage.removeItem('tipoUsuario');
         localStorage.removeItem('correoUsuario');
@@ -28,45 +34,78 @@ if (nombreUsuario) {
     });
 }
 
-// Cargamos los creadores reales desde el backend y armamos las tarjetas
-// dinámicamente, en vez de mostrar los tres datos inventados de antes.
+// Arma la tarjeta de un creador. Los datos se insertan como TEXTO (textContent),
+// nunca como código HTML, para que nadie pueda colar código malicioso.
+function crearTarjetaCreador(creador) {
+    const inicial = creador.nombre ? creador.nombre.charAt(0).toUpperCase() : '?';
+
+    const tarjeta = document.createElement('div');
+    tarjeta.className = 'tarjeta-creador';
+    tarjeta.style.cursor = 'pointer';
+
+    const portada = document.createElement('div');
+    portada.className = 'portada';
+
+    const info = document.createElement('div');
+    info.className = 'info-creador';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = inicial;
+
+    const nombre = document.createElement('h3');
+    nombre.textContent = creador.nombre;
+
+    const categoria = document.createElement('p');
+    categoria.className = 'categoria';
+    categoria.textContent = creador.categoria || 'Sin categoría';
+
+    const bio = document.createElement('p');
+    bio.className = 'bio-creador';
+    bio.textContent = creador.descripcion || 'Este creador todavía no agregó una descripción.';
+
+    info.append(avatar, nombre, categoria, bio);
+    tarjeta.append(portada, info);
+
+    tarjeta.addEventListener('click', function() {
+        window.location.href = `perfil.html?id=${encodeURIComponent(creador._id)}`;
+    });
+
+    return tarjeta;
+}
+
+function mostrarMensaje(contenedor, texto) {
+    contenedor.innerHTML = '';
+    const mensaje = document.createElement('p');
+    mensaje.className = 'cargando-creadores';
+    mensaje.textContent = texto;
+    contenedor.appendChild(mensaje);
+}
+
+// Cargamos los creadores reales desde el backend
 const gridCreadores = document.getElementById('grid-creadores');
 
 if (gridCreadores) {
-    fetch('https://privateroute-backend.onrender.com/creadores')
-        .then(respuesta => respuesta.json())
+    fetch(`${API}/creadores`)
+        .then(respuesta => {
+            if (!respuesta.ok) {
+                throw new Error('No se pudieron cargar los creadores.');
+            }
+            return respuesta.json();
+        })
         .then(creadores => {
             if (creadores.length === 0) {
-                gridCreadores.innerHTML = '<p class="cargando-creadores">Todavía no hay creadores registrados. ¡Sé el primero!</p>';
+                mostrarMensaje(gridCreadores, 'Todavía no hay creadores registrados. ¡Sé el primero!');
                 return;
             }
 
             gridCreadores.innerHTML = '';
-
             creadores.forEach(creador => {
-                const inicial = creador.nombre ? creador.nombre.charAt(0).toUpperCase() : '?';
-                const descripcion = creador.descripcion || 'Este creador todavía no agregó una descripción.';
-
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta-creador';
-                tarjeta.style.cursor = 'pointer';
-                tarjeta.innerHTML = `
-                    <div class="portada"></div>
-                    <div class="info-creador">
-                        <div class="avatar">${inicial}</div>
-                        <h3>${creador.nombre}</h3>
-                        <p class="categoria">${creador.categoria || 'Sin categoría'}</p>
-                        <p class="bio-creador">${descripcion}</p>
-                    </div>
-                `;
-                tarjeta.addEventListener('click', function() {
-                    window.location.href = `perfil.html?id=${creador._id}`;
-                });
-                gridCreadores.appendChild(tarjeta);
+                gridCreadores.appendChild(crearTarjetaCreador(creador));
             });
         })
         .catch(error => {
-            gridCreadores.innerHTML = '<p class="cargando-creadores">No se pudieron cargar los creadores. Intenta de nuevo más tarde.</p>';
+            mostrarMensaje(gridCreadores, 'No se pudieron cargar los creadores. Intenta de nuevo más tarde.');
             console.error(error);
         });
 }

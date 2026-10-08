@@ -1,3 +1,9 @@
+// Si abres la página con Live Server (en tu computadora), habla con tu backend local.
+// Si la abres desde GitHub Pages, habla con el backend de Render.
+const API = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+    ? 'http://localhost:3000'
+    : 'https://privateroute-backend.onrender.com';
+
 const selectTipo = document.getElementById('tipo');
 const camposCreador = document.getElementById('campos-creador');
 
@@ -22,7 +28,7 @@ document.getElementById('formulario-registro').addEventListener('submit', functi
         descripcion: document.getElementById('descripcion').value
     };
 
-    fetch('https://privateroute-backend.onrender.com/registro', {
+    fetch(`${API}/registro`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

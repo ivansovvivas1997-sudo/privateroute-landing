@@ -1,3 +1,9 @@
+// Si abres la página con Live Server (en tu computadora), habla con tu backend local.
+// Si la abres desde GitHub Pages, habla con el backend de Render.
+const API = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+    ? 'http://localhost:3000'
+    : 'https://privateroute-backend.onrender.com';
+
 document.getElementById('formulario-login').addEventListener('submit', function(evento) {
     evento.preventDefault();
 
@@ -6,7 +12,7 @@ document.getElementById('formulario-login').addEventListener('submit', function(
         contrasena: document.getElementById('contrasena').value
     };
 
-    fetch('https://privateroute-backend.onrender.com/login', {
+    fetch(`${API}/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -21,9 +27,10 @@ document.getElementById('formulario-login').addEventListener('submit', function(
         return respuesta.json();
     })
     .then(datosUsuario => {
+        localStorage.setItem('tokenUsuario', datosUsuario.token);
         localStorage.setItem('nombreUsuario', datosUsuario.nombre);
         localStorage.setItem('tipoUsuario', datosUsuario.tipo);
-        localStorage.setItem('correoUsuario', datosUsuario.correo);
+        localStorage.removeItem('correoUsuario');
         window.location.href = 'panel.html';
     })
     .catch(error => {
