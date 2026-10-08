@@ -1,121 +1,180 @@
-// Si abres la página con Live Server (en tu computadora), habla con tu backend local.
-// Si la abres desde GitHub Pages, habla con el backend de Render.
-const API = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+// script-perfil.js - Perfil público de un creador en PrivateRoute
+
+// Si la página corre en local usa el backend local; si no, el de Render
+const API_URL = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
     ? 'http://localhost:3000'
     : 'https://privateroute-backend.onrender.com';
 
-// Leemos el ID del creador desde la URL (ej: perfil.html?id=abc123)
-const parametros = new URLSearchParams(window.location.search);
-const idCreador = parametros.get('id');
-const contenedorPerfil = document.getElementById('perfil-creador');
-const galeria = document.getElementById('galeria-perfil');
+const seccionPerfil = document.getElementById('perfil-creador');
+const seccionGaleria = document.getElementById('galeria-perfil');
 
-// Si ya hay una sesión activa, cambiamos el nav igual que en las demás páginas
-const nombreUsuario = localStorage.getItem('nombreUsuario');
-const tokenUsuario = localStorage.getItem('tokenUsuario');
+// --- Barra de navegación según haya sesión o no ---
+function ajustarNavegacion() {
+    const token = localStorage.getItem('tokenUsuario');
+    const enlaceLogin = document.getElementById('nav-login');
+    const enlaceRegistro = document.getElementById('nav-registro');
+    if (!token || !enlaceLogin || !enlaceRegistro) return;
 
-if (nombreUsuario && tokenUsuario) {
-    const navLogin = document.getElementById('nav-login');
-    const navRegistro = document.getElementById('nav-registro');
+    enlaceLogin.textContent = 'Mi panel';
+    enlaceLogin.href = 'panel.html';
 
-    navLogin.textContent = 'Mi panel';
-    navLogin.href = 'panel.html';
-
-    navRegistro.textContent = 'Cerrar sesión';
-    navRegistro.href = '#';
-    navRegistro.addEventListener('click', function(evento) {
+    enlaceRegistro.textContent = 'Cerrar sesión';
+    enlaceRegistro.href = '#';
+    enlaceRegistro.addEventListener('click', function (evento) {
         evento.preventDefault();
         localStorage.removeItem('tokenUsuario');
         localStorage.removeItem('nombreUsuario');
         localStorage.removeItem('tipoUsuario');
-        localStorage.removeItem('correoUsuario');
-        window.location.reload();
+        window.location.href = 'index.html';
     });
 }
 
-function mostrarMensaje(texto) {
-    contenedorPerfil.innerHTML = '';
-    const mensaje = document.createElement('p');
-    mensaje.className = 'cargando-creadores';
-    mensaje.textContent = texto;
-    contenedorPerfil.appendChild(mensaje);
+// --- Muestra un mensaje dentro de una sección ---
+function mostrarMensaje(contenedor, texto) {
+    contenedor.textContent = '';
+    const parrafo = document.createElement('p');
+    parrafo.className = 'cargando-creadores';
+    parrafo.textContent = texto;
+    contenedor.appendChild(parrafo);
 }
 
-// Arma el perfil con los datos como TEXTO (textContent), nunca como código HTML.
+// --- Visor para ver una foto en grande ---
+const visor = document.createElement('div');
+visor.className = 'visor-imagen';
+
+const botonCerrarVisor = document.createElement('button');
+botonCerrarVisor.className = 'visor-cerrar';
+botonCerrarVisor.textContent = '×';
+botonCerrarVisor.setAttribute('aria-label', 'Cerrar');
+
+const imagenVisor = document.createElement('img');
+imagenVisor.alt = 'Foto en grande';
+
+visor.appendChild(botonCerrarVisor);
+visor.appendChild(imagenVisor);
+document.body.appendChild(visor);
+
+function abrirVisor(direccion) {
+    imagenVisor.src = direccion;
+    visor.classList.add('abierto');
+    document.body.style.overflow = 'hidden'; // evita que la página se mueva detrás
+}
+
+function cerrarVisor() {
+    visor.classList.remove('abierto');
+    imagenVisor.src = '';
+    document.body.style.overflow = '';
+}
+
+// Se cierra con la X, tocando el fondo oscuro o con la tecla Esc
+botonCerrarVisor.addEventListener('click', cerrarVisor);
+visor.addEventListener('click', function (evento) {
+    if (evento.target === visor) cerrarVisor();
+});
+document.addEventListener('keydown', function (evento) {
+    if (evento.key === 'Escape') cerrarVisor();
+});
+
+// --- Datos del creador ---
 function mostrarPerfil(creador) {
-    const inicial = creador.nombre ? creador.nombre.charAt(0).toUpperCase() : '?';
+    seccionPerfil.textContent = '';
 
-    document.title = `${creador.nombre} - PrivateRoute`;
-    contenedorPerfil.innerHTML = '';
+    const nombre = document.createElement('h1');
+    nombre.className = 'perfil-nombre';
+    nombre.textContent = creador.nombre || 'Creador';
+    seccionPerfil.appendChild(nombre);
 
-    const portada = document.createElement('div');
-    portada.className = 'portada-perfil';
+    if (creador.categoria) {
+        const categoria = document.createElement('p');
+        categoria.className = 'perfil-categoria';
+        categoria.textContent = creador.categoria;
+        seccionPerfil.appendChild(categoria);
+    }
 
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar-perfil';
-    avatar.textContent = inicial;
-
-    const titulo = document.createElement('h1');
-    titulo.textContent = creador.nombre;
-
-    const categoria = document.createElement('p');
-    categoria.className = 'categoria-perfil';
-    categoria.textContent = creador.categoria || 'Sin categoría';
-
-    const bio = document.createElement('p');
-    bio.className = 'bio-perfil';
-    bio.textContent = creador.descripcion || 'Este creador todavía no agregó una descripción.';
+    const descripcion = document.createElement('p');
+    descripcion.className = 'perfil-descripcion';
+    descripcion.textContent = creador.descripcion || 'Este creador todavía no ha escrito una descripción.';
+    seccionPerfil.appendChild(descripcion);
 
     const boton = document.createElement('button');
-    boton.className = 'btn-suscribir';
+    boton.className = 'btn-registro btn-suscribirse';
     boton.textContent = 'Suscribirse';
-    boton.addEventListener('click', function() {
-        alert('Las suscripciones todavía no están disponibles. ¡Pronto vamos a habilitar los pagos!');
+    seccionPerfil.appendChild(boton);
+
+    const aviso = document.createElement('p');
+    aviso.className = 'perfil-aviso';
+    seccionPerfil.appendChild(aviso);
+
+    boton.addEventListener('click', function () {
+        aviso.textContent = 'Los pagos y suscripciones todavía no están disponibles — ¡muy pronto!';
     });
 
-    const nota = document.createElement('p');
-    nota.className = 'nota-perfil';
-    nota.textContent = 'Los pagos y suscripciones todavía no están disponibles — ¡muy pronto!';
-
-    contenedorPerfil.append(portada, avatar, titulo, categoria, bio, boton, nota);
+    document.title = (creador.nombre || 'Creador') + ' - PrivateRoute';
 }
 
-function cargarGaleria() {
-    fetch(`${API}/creadores/${encodeURIComponent(idCreador)}/contenido`)
-        .then(respuesta => {
-            if (!respuesta.ok) {
-                throw new Error('No se pudo cargar la galería.');
-            }
-            return respuesta.json();
-        })
-        .then(lista => {
-            lista.forEach(item => {
-                const img = document.createElement('img');
-                img.src = item.url;
-                img.alt = 'Foto del creador';
-                img.className = 'miniatura-contenido';
-                galeria.appendChild(img);
-            });
-        })
-        .catch(error => console.error('No se pudo cargar la galería:', error));
-}
+// --- Galería de fotos ---
+function mostrarGaleria(fotos) {
+    seccionGaleria.textContent = '';
 
-if (!idCreador) {
-    mostrarMensaje('No se especificó ningún creador.');
-} else {
-    fetch(`${API}/creadores/${encodeURIComponent(idCreador)}`)
-        .then(respuesta => {
-            if (!respuesta.ok) {
-                throw new Error('No se pudo encontrar este creador.');
-            }
-            return respuesta.json();
-        })
-        .then(creador => {
-            mostrarPerfil(creador);
-            cargarGaleria();
-        })
-        .catch(error => {
-            mostrarMensaje('No se pudo cargar este perfil. Puede que el creador ya no exista.');
-            console.error(error);
+    if (fotos.length === 0) {
+        mostrarMensaje(seccionGaleria, 'Este creador todavía no ha subido contenido.');
+        return;
+    }
+
+    fotos.forEach(function (foto) {
+        const direccion = foto.url || foto.urlImagen || foto.imagen || foto.secure_url;
+        if (!direccion) return;
+
+        const imagen = document.createElement('img');
+        imagen.src = direccion;
+        imagen.alt = 'Foto del creador';
+        imagen.loading = 'lazy';
+        imagen.addEventListener('click', function () {
+            abrirVisor(direccion);
         });
+        seccionGaleria.appendChild(imagen);
+    });
 }
+
+// --- Carga todo desde el servidor ---
+async function cargarPerfil() {
+    const id = new URLSearchParams(location.search).get('id');
+
+    if (!id) {
+        mostrarMensaje(seccionPerfil, 'No se indicó ningún creador. Vuelve a la página principal y elige uno.');
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(API_URL + '/creadores/' + encodeURIComponent(id));
+        if (!respuesta.ok) {
+            mostrarMensaje(seccionPerfil, 'No encontramos este creador.');
+            return;
+        }
+        const datos = await respuesta.json();
+        mostrarPerfil(datos.creador || datos);
+    } catch (error) {
+        console.error('Error al cargar el perfil:', error);
+        mostrarMensaje(seccionPerfil, 'No se pudo conectar con el servidor. Espera un minuto y recarga la página.');
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(API_URL + '/creadores/' + encodeURIComponent(id) + '/contenido');
+        if (!respuesta.ok) {
+            mostrarMensaje(seccionGaleria, 'No se pudo cargar el contenido.');
+            return;
+        }
+        const datos = await respuesta.json();
+        const fotos = Array.isArray(datos) ? datos : (datos.contenido || []);
+        mostrarGaleria(fotos);
+    } catch (error) {
+        console.error('Error al cargar el contenido:', error);
+        mostrarMensaje(seccionGaleria, 'No se pudo cargar el contenido.');
+    }
+}
+
+ajustarNavegacion();
+cargarPerfil();
+
+// FIN DE script-perfil.js

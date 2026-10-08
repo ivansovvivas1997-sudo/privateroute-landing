@@ -373,10 +373,11 @@ nav {
     line-height: 1.5;
 }
 
+/* ===== Perfil público del creador ===== */
 .perfil-creador {
     max-width: 700px;
     margin: 0 auto;
-    padding: 0 24px 80px 24px;
+    padding: 40px 24px 40px 24px;
     text-align: center;
 }
 
@@ -408,13 +409,15 @@ nav {
     margin: 0 0 8px 0;
 }
 
-.categoria-perfil {
+.categoria-perfil,
+.perfil-categoria {
     color: #C9A24B;
     font-size: 14px;
     margin: 0 0 24px 0;
 }
 
-.bio-perfil {
+.bio-perfil,
+.perfil-descripcion {
     color: #8A8A94;
     font-size: 16px;
     line-height: 1.6;
@@ -422,7 +425,8 @@ nav {
     margin: 0 auto 32px auto;
 }
 
-.nota-perfil {
+.nota-perfil,
+.perfil-aviso {
     color: #8A8A94;
     font-size: 13px;
     font-style: italic;
@@ -522,13 +526,67 @@ nav {
     margin-top: 20px;
 }
 
+/* ===== Galería del perfil público ===== */
 .galeria-perfil {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 0 24px 60px 24px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.galeria-perfil img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 2px solid #C9A24B;
+    border-radius: 12px;
+    background-color: #161620;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.galeria-perfil img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 18px rgba(201, 162, 75, 0.4);
+}
+
+/* ===== Visor para ver la foto en grande ===== */
+.visor-imagen {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(11, 11, 15, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.visor-imagen.abierto {
+    display: flex;
+}
+
+.visor-imagen img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border: 2px solid #C9A24B;
+    border-radius: 12px;
+}
+
+.visor-cerrar {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: #F2F0EA;
+    font-size: 40px;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .miniatura-contenido {
@@ -685,4 +743,12 @@ nav {
     .creadores, .como-funciona, .precios {
         padding: 60px 20px;
     }
+
+    .galeria-perfil {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 0 16px 40px 16px;
+    }
 }
+
+/* FIN DE style.css */
